@@ -18,13 +18,12 @@
                         Sign in
                       </h1>
                       <v-text-field
-                        id="username"
-                        v-model="login"
-                        label="Username"
-                        name="Username"
-                        append-icon="person"
-                        type="text"
-                        :color="bgColor"
+                        id="contactNumber"
+                        v-model="contactNumber"
+                        label="contactNumber"
+                        name="contactNumber"
+                        append-icon="phone"
+                        type = "tel"
                       />
                       <v-text-field
                         id="password"
@@ -45,6 +44,28 @@
                           Forgot your password?
                         </a>
                       </div>
+                      <v-container fluid>
+                          
+                          <v-radio-group
+                            v-model="radios"
+                            mandatory
+                          >
+                            <v-row>
+                              <v-col>  
+                                <v-radio
+                                  label="Customer"
+                                  value="1"
+                                ></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio
+                                  label="Worker"
+                                  value="2"
+                                ></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                      </v-container>
                       <div class="text-center mt-6">
                         <v-btn type="submit" large :color="bgColor" dark
                           >Sign In</v-btn
@@ -101,17 +122,14 @@
                       Sign Up
                     </h1>
                     <v-row dense>
-                      <v-card>
-                        <v-icon>person</v-icon>
-              <v-card-title v-text="Buyer"></v-card-title>
-           </v-card>
+                      
                     </v-row>
                     <v-form class="signup-form-form" @submit.prevent="signup">
                       <v-text-field
-                        id="username"
-                        v-model="username"
-                        label="Username"
-                        name="username"
+                        id="fullName"
+                        v-model="fullName"
+                        label="Full Name"
+                        name="fullName"
                         append-icon="person"
                         type="text"
                       />
@@ -124,6 +142,15 @@
                         type="email"
                       />
                       <v-text-field
+                        id="contactNumber"
+                        v-model="contactNumber"
+                        label="contactNumber"
+                        name="contactNumber"
+                        append-icon="phone"
+                        type = "tel"
+                    
+                      />
+                      <v-text-field
                         id="password"
                         v-model="password"
                         label="Password"
@@ -131,6 +158,30 @@
                         append-icon="lock"
                         type="password"
                       />
+                      
+                      
+                      <v-container fluid>
+                          
+                          <v-radio-group
+                            v-model="radios"
+                            mandatory
+                          >
+                            <v-row>
+                              <v-col>  
+                                <v-radio
+                                  label="Customer"
+                                  value="1"
+                                ></v-radio>
+                              </v-col>
+                              <v-col>
+                                <v-radio
+                                  label="Worker"
+                                  value="2"
+                                ></v-radio>
+                              </v-col>
+                            </v-row>
+                          </v-radio-group>
+                      </v-container>
                       <div class="text-center mt-6">
                         <v-btn type="submit" large :color="bgColor" dark>
                           Sign Up</v-btn
@@ -198,6 +249,7 @@
 
 <script>
 // import Notification from './Notification'
+import axios from 'axios';
 export default {
   name: 'Signupform',
   // components: {
@@ -229,38 +281,48 @@ export default {
   },
   data: () => ({
     step: 1,
-    username: '',
+    fullName: '',
     email: '',
     password: '',
+    contactNumber : '',
+    radios : '',
     login: '',
     snackbarType: 'success',
     snackbarMessage: '',
     snackbar: false
   }),
   methods: {
-    signup() {
-      this.$auth
-        .signup({
-          data: {
-            user: {
-              username: this.username,
-              email: this.email,
-              password: this.password
-            }
-          }
-        })
-        .catch((e) => {
-          this.error = e + ''
-        })
+    async signup() {
+      let isBuyer = false;
+          if(this.radios == '1')
+            isBuyer = true;
+
+         let response = await axios.post("http://localhost:3000/api/auth/signup", {
+        
+            contactNumber: this.contactNumber,
+            password: this.password,
+            fullName : this.fullName,
+            email : this.email,
+            isBuyer : isBuyer
+          
+        });
+        console.log(response.data);
+      
     },
     async signin() {
       try {
-        const response = await this.$auth.loginWith('local', {
-          data: {
-            login: this.login,
-            password: this.password
-          }
-        })
+          let isBuyer = false;
+          if(this.radios == '1')
+            isBuyer = true;
+
+         let response = await axios.post("http://localhost:3000/api/auth/signin", {
+        
+            contactNumber: this.contactNumber,
+            password: this.password,
+            isBuyer : isBuyer
+          
+        });
+        console.log(response.data);
         this.snackbarType = response.data.type
         this.snackbarMessage = response.data.message
         this.snackbar = true
