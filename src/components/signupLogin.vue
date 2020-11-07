@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <v-row align="center" justify="center" no-gutters>
     <v-col cols="12" sm="8" md="8" class="">
       <v-card class="evelation-12 card">
@@ -36,6 +37,20 @@
                       <a
                         href="#"
                         class="mt-3 overline no-text-decoration"
+=======
+    <v-row align="center" justify="center" no-gutters>
+      <v-col cols="12" sm="8" md="8" class="">
+        <v-card class="evelation-12 card">
+          <v-window v-model="step">
+            <!--SignIn-->
+            <v-window-item :value="1">
+              <v-row class="">
+                <v-col cols="12" md="8" class="pt-6 pb-6">
+                  <v-card-text>
+                    <v-form class="signup-form-form" @submit.prevent="signin">
+                      <h1
+                        class="text-center display-1 mb-10"
+>>>>>>> e3415debf2e12d8458bc2cdb54e098593cac6690
                         :class="`${bgColor}--text`"
                         @click="step = 3"
                       >
