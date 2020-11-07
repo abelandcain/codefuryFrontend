@@ -1,6 +1,4 @@
 <template>
-  
-
     <v-row align="center" justify="center" no-gutters>
       <v-col cols="12" sm="8" md="8" class="">
         <v-card class="evelation-12 card">
